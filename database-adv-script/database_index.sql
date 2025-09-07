@@ -17,3 +17,42 @@ CREATE INDEX idx_properties_location ON properties(location);
 
 -- 6. Index on reviews.property_id (for retrieving reviews linked to properties)
 CREATE INDEX idx_reviews_property_id ON reviews(property_id);
+
+-- Example query to measure performance before adding indexes
+EXPLAIN ANALYZE
+SELECT *
+FROM bookings
+WHERE user_id = 'some-user-uuid';
+
+EXPLAIN ANALYZE
+SELECT *
+FROM properties
+WHERE location = 'Miami Beach, FL';
+
+EXPLAIN ANALYZE
+SELECT *
+FROM bookings b
+JOIN users u ON b.user_id = u.user_id
+WHERE b.start_date BETWEEN '2024-06-01' AND '2024-06-30';
+
+-- Step 1: Create indexes
+CREATE INDEX idx_bookings_user_id ON bookings(user_id);
+CREATE INDEX idx_properties_location ON properties(location);
+CREATE INDEX idx_bookings_start_date ON bookings(start_date);
+
+-- Step 2: Measure performance after adding indexes
+EXPLAIN ANALYZE
+SELECT *
+FROM bookings
+WHERE user_id = 'some-user-uuid';
+
+EXPLAIN ANALYZE
+SELECT *
+FROM properties
+WHERE location = 'Miami Beach, FL';
+
+EXPLAIN ANALYZE
+SELECT *
+FROM bookings b
+JOIN users u ON b.user_id = u.user_id
+WHERE b.start_date BETWEEN '2024-06-01' AND '2024-06-30';
