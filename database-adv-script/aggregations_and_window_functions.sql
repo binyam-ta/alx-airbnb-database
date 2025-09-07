@@ -22,3 +22,19 @@ FROM properties p
 LEFT JOIN bookings b ON p.property_id = b.property_id
 GROUP BY p.property_id, p.name
 ORDER BY booking_rank;
+
+-- Count total bookings per property
+WITH property_bookings AS (
+    SELECT
+        property_id,
+        COUNT(*) AS total_bookings
+    FROM bookings
+    GROUP BY property_id
+)
+
+-- Rank properties by total bookings using ROW_NUMBER()
+SELECT
+    property_id,
+    total_bookings,
+    ROW_NUMBER() OVER (ORDER BY total_bookings DESC) AS rank_by_bookings
+FROM property_bookings;
