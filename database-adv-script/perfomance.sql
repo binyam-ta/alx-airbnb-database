@@ -1,4 +1,4 @@
--- Initial query: Retrieve all bookings with user, property, and payment details
+-- Initial query with WHERE and AND
 SELECT
     b.booking_id,
     b.start_date,
@@ -20,7 +20,10 @@ SELECT
 FROM bookings b
 JOIN users u ON b.user_id = u.user_id
 JOIN properties p ON b.property_id = p.property_id
-LEFT JOIN payments pay ON b.booking_id = pay.booking_id;
+LEFT JOIN payments pay ON b.booking_id = pay.booking_id
+WHERE b.start_date >= '2024-01-01'
+  AND b.status = 'confirmed';
+
 
 
 -- Analyze query performance
